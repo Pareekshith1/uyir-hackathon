@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import random
 import qrcode
 from PIL import Image, ImageTk
@@ -85,6 +85,13 @@ def booking_interface():
     duration_entry = tk.Entry(booking_root, font=("Arial", 12))
     duration_entry.pack(pady=5)
 
+    # ----------------- Destination Selection -----------------
+    tk.Label(booking_root, text="📍 Select Destination:", font=("Arial", 12), bg="#1A1A1A", fg="white").pack(pady=5)
+    destination_values = ["Brookfield Mall", "Prozone Mall", "Funmall", "City Centre", "Plaza Mall"]
+    destination_combo = ttk.Combobox(booking_root, values=destination_values, font=("Arial", 12))
+    destination_combo.set(destination_values[0])
+    destination_combo.pack(pady=5)
+
     tk.Label(booking_root, text="🅿️ Select Slot:", font=("Arial", 18, "bold"), bg="#1A1A1A", fg="white").pack(pady=10)
 
     update_slot_buttons()
@@ -93,6 +100,7 @@ def booking_interface():
         name = name_entry.get()
         slot = selected_slot.get()
         duration = duration_entry.get()
+        destination = destination_combo.get().strip()
 
         if not (name and slot and duration.isdigit()):
             messagebox.showerror("Error", "Please enter valid details!")
@@ -109,12 +117,12 @@ def booking_interface():
 
         update_slot_buttons()
         update_parking_lot()
-        display_ticket(name, slot, duration)
+        display_ticket(name, slot, duration,destination)
 
     tk.Button(booking_root, text="📥 Book Now", font=("Arial", 14, "bold"), command=generate_ticket, bg="#007BFF", fg="white").pack(pady=20)
 
 
-def display_ticket(name, slot, duration):
+def display_ticket(name, slot, duration,destination):
     ticket_window = tk.Toplevel(root)
     ticket_window.title("🎟 Parking Ticket")
     ticket_window.geometry("400x300")
@@ -124,6 +132,7 @@ def display_ticket(name, slot, duration):
     tk.Label(ticket_window, text=f"👤 Name: {name}", font=("Arial", 14), bg="#2F2F2F", fg="white").pack(pady=5)
     tk.Label(ticket_window, text=f"🅿️ Slot: {slot}", font=("Arial", 14), bg="#2F2F2F", fg="white").pack(pady=5)
     tk.Label(ticket_window, text=f"⌛ Duration: {duration // 60} min", font=("Arial", 14), bg="#2F2F2F", fg="white").pack(pady=5)
+
 
 
 def parking_lot_interface():
